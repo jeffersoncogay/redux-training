@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux'
 
 import Companies from './Companies'
-import Employees from './Employees'
 
 class App extends PureComponent{
   constructor(props) {
@@ -28,19 +27,17 @@ class App extends PureComponent{
 
   handleSave = () => {
     const { form: { name, address } } = this.state
-    this.props.AddCompany({
-      name, address
+    this.props.addCompany({
+      name,
+      address
     })
-  }
-
-  deleteCompany = (id) => {
-    this.props.DeleteCompany(id)
   }
 
   render() {
     const { form } = this.state
-    const { employees } = this.props
     const { name, address } = form
+
+    console.log('@PROPS', this.props)
 
     return (
       <div className="App">
@@ -64,37 +61,30 @@ class App extends PureComponent{
             onClick={this.handleSave}
           >Save</button>
         </div>
-        <Companies 
-          deleteCompany={this.deleteCompany}
-        />
-        <Employees
-          employees={employees}
-        />
+        <Companies />
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
-  companies: state.companies,
-  employees: state.employees
-})
-
-const mapActionToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    AddCompany: (payload) => {
-      dispatch({
-        type: 'ADD_COMPANY',
-        payload
-      })
-    },
-    DeleteCompany: (payload) => {
-      dispatch({
-        type: 'DELETE_COMPANY',
-        payload
-      })
-    }
+    companies: state.companies
   }
 }
 
-export default connect(mapStateToProps, mapActionToProps)(App);
+//TODO: CONTINUE
+const mapActionToProps = (dispatch) => {
+  return {
+    addCompany: (payload) => dispatch({
+      type: 'ADD_COMPANY',
+      payload
+    }),
+    deleteCompany: (payload) => dispatch({
+      type: 'DELETE_COMPANY',
+      payload
+    })
+  }
+}
+
+export default connect(mapStateToProps, mapActionToProps)(App)

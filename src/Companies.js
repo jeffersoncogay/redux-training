@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 const Companies = (props) => {
-  const { deleteCompany, companies, dispatch } = props
-  console.log('zzzz', props)
+  console.log('props', props)
+  const { companies, dispatch } = props
   return (
     <div>
       {
-        companies.map(({ id, name, address, employees }) => {
+        companies.map(({ id, name, address }) => {
           return (
             <div key={id} style={{ paddingBottom: '10px' }}>
               <div>
@@ -16,16 +16,14 @@ const Companies = (props) => {
               <div>
                 <strong>Address: </strong> <span>{address}</span>
               </div>
-              <div>
-                <strong>Employees: </strong>
-              </div>
               <button
                 onClick={() => {
-                  deleteCompany(id)
+                  dispatch({
+                    type: 'DELETE_COMPANY',
+                    payload: id
+                  })
                 }}
-              >
-                Delete Company
-              </button>
+              >Delete {name}</button>
             </div>
           )
         })
@@ -34,8 +32,10 @@ const Companies = (props) => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  companies: state.companies
-})
+const mapStateToProps = (state) => {
+  return {
+    companies: state.companies
+  }
+}
 
 export default connect(mapStateToProps)(Companies)
